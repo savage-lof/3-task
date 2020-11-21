@@ -1,32 +1,39 @@
-import random
 import sys
-from PyQt5.QtWidgets import QWidget, QApplication, QPushButton
+import random
+from PyQt5 import uic  # Импортируем uic
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPainter, QColor
-from untitled import Ui_Form
 
 
-class WindowDraw(QWidget, Ui_Form):
-    def init(self):
-        super().init()
-        self.setupUi(self)
-        self.pushButton.clicked.connect(self.run)
+class MyWidget(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('jojo.ui', self)
+        self.pushButton.clicked.connect(self.paint)
+        self.do_paint = False
 
     def paintEvent(self, event):
-        self.qp = QPainter()
-        self.qp.begin(self)
-        self.qp.end()
+        if self.do_paint:
+            qp = QPainter()
+            qp.begin(self)
+            self.draw_flag(qp)
+            qp.end()
 
-    def run(self):
-        self.qp.setBrush(QColor('#f7ff00'))
-        i = random.randint(0, 500)
-        j = random.randint(0, 500)
-        const = random.randint(10, 60)
-        self.qp.drawEllipse(i, j, const, const)
+    def paint(self):
+        self.do_paint = True
+        self.repaint()
+
+    def draw_flag(self, qp):
+        qp.setBrush(QColor('#f7ff00'))
+        i = random.randint(0, 400)
+        j = random.randint(0, 300)
+        const = random.randint(10, 160)
+        qp.drawEllipse(i, j, const, const)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = WindowDraw()
+    ex = MyWidget()
     ex.show()
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
