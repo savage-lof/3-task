@@ -1,15 +1,14 @@
 import sys
 import random
-from PyQt5 import uic  # Импортируем uic
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QPainter, QColor
+from jojo import Ui_Form
 
 
-class MyWidget(QMainWindow):
+class MyWidget(QMainWindow, Ui_Form):
     def __init__(self):
         super().__init__()
-        uic.loadUi('jojo.ui', self)
+        self.setupUi(self)
         self.pushButton.clicked.connect(self.paint)
         self.do_paint = False
 
@@ -25,7 +24,8 @@ class MyWidget(QMainWindow):
         self.repaint()
 
     def draw_flag(self, qp):
-        qp.setBrush(QColor('#f7ff00'))
+        mass = [i for i in range(0, 256)]
+        qp.setBrush(QColor(random.choice(mass), random.choice(mass), random.choice(mass)))
         i = random.randint(0, 400)
         j = random.randint(0, 300)
         const = random.randint(10, 160)
